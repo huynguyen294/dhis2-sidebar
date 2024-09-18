@@ -9,7 +9,7 @@ const UtilModal = ({ isOpen, onClose }) => {
           <>
             <ModalHeader className="flex flex-col gap-1">Utils</ModalHeader>
             <ModalBody className="text-base">
-              <p className="-mb-2 underline">Functions:</p>
+              <p className="-mb-2 font-bold underline italic">Functions:</p>
               <div>
                 <p className="font-semibold">pull(endPoint)</p>
                 <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
@@ -22,7 +22,7 @@ const UtilModal = ({ isOpen, onClose }) => {
                   <li>return: Promise</li>
                 </ul>
               </div>
-              <p className="-mb-2 underline">Libraries:</p>
+              <p className="-mb-2 font-bold underline italic">Libraries:</p>
               <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
                 <li>lodash as _</li>
                 <li>xlsx as XLSX</li>

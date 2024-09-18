@@ -42,7 +42,7 @@ const ScriptRunner = () => {
           inputRef.current.value = "";
         }}
       ></input>
-      <div className="p-2 space-x-2 w-full flex justify-between">
+      <div className="pt-2 px-2 pb-1 space-x-2 w-full flex justify-between">
         <Input
           variant="bordered"
           className="w-auto"
