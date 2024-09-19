@@ -43,6 +43,7 @@ const SavedScriptsModal = ({ isOpen, onClose }) => {
                     setCurrentScript(scripts.find((s) => s.id == id));
                     onClose();
                   }}
+                  className="max-h-[60dvh] overflow-y-auto"
                 >
                   {filteredScripts.map((script) => (
                     <ListboxItem

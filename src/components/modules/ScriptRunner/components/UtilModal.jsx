@@ -8,7 +8,7 @@ const UtilModal = ({ isOpen, onClose }) => {
         {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">Utils</ModalHeader>
-            <ModalBody className="text-base">
+            <ModalBody className="text-base max-h-[70dvh] overflow-y-auto">
               <p className="-mb-2 font-bold underline italic">Functions:</p>
               <div>
                 <p className="font-semibold">pull(endPoint)</p>

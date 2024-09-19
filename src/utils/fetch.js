@@ -7,13 +7,13 @@ appMode = import.meta.env.VITE_APP_MODE;
 
 const pull = async (endPoint) => {
   if (appMode === "development") {
-    return fetch(baseUrl + endPoint, {
+    const result = await fetch(baseUrl + endPoint, {
       headers: {
         Authorization: "Basic " + btoa(`${username}:${password}`),
       },
-    })
-      .then((result) => result.json())
-      .then((json) => json);
+    });
+    const data = await result.json();
+    return data;
   }
 
   return new Promise((resolve, reject) => {
@@ -33,7 +33,7 @@ const pull = async (endPoint) => {
 
 const push = async (endPoint, payload, method) => {
   if (appMode === "development") {
-    return fetch(baseUrl + endPoint, {
+    const result = await fetch(baseUrl + endPoint, {
       method: method ? method : "POST",
       body: JSON.stringify(payload),
       headers: {
@@ -41,6 +41,8 @@ const push = async (endPoint, payload, method) => {
         Authorization: !username ? "" : "Basic " + btoa(`${username}:${password}`),
       },
     });
+    const data = await result.json();
+    return data;
   }
 
   return new Promise((resolve, reject) => {

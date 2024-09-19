@@ -1,12 +1,10 @@
 import { Hook, Unhook, Console as ConsoleFeed } from "console-feed";
 import { useEffect, useState } from "react";
 import { sendMessage } from "./utils";
+import { exportFile, openFile } from "@/utils/utils";
 import * as turf from "@turf/turf";
 import * as XLSX from "xlsx";
 import _ from "lodash";
-
-const exportFile = () => {};
-const openFile = () => {};
 
 const Console = () => {
   const [logs, setLogs] = useState([]);

@@ -5,7 +5,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { materialDark } from "@uiw/codemirror-theme-material";
 import { Button, Input, Tooltip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faBars, faFile, faPlay, faSave, faSync, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import CodeMirror from "@uiw/react-codemirror";
 import js_beautify from "js-beautify";
@@ -134,10 +134,18 @@ const ScriptRunner = () => {
               </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions" onAction={handleMenuAction}>
-              <DropdownItem key="beautify">Beautify</DropdownItem>
-              <DropdownItem key="new-file">New script</DropdownItem>
-              <DropdownItem key="save">Save script</DropdownItem>
-              <DropdownItem key="save-as">Save as new script</DropdownItem>
+              <DropdownItem key="beautify" startContent={<FontAwesomeIcon icon={faArrowsRotate} />}>
+                Beautify
+              </DropdownItem>
+              <DropdownItem key="new-file" startContent={<FontAwesomeIcon icon={faFile} />}>
+                New script
+              </DropdownItem>
+              <DropdownItem key="save" startContent={<FontAwesomeIcon icon={faSave} />}>
+                Save script
+              </DropdownItem>
+              <DropdownItem key="save-as" startContent={<FontAwesomeIcon icon={faSave} />}>
+                Save as new script
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>

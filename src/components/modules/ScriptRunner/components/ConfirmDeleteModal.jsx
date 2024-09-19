@@ -3,11 +3,11 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from
 
 const ConfirmDeleteModal = ({ isOpen, onClose, onDelete }) => {
   return (
-    <Modal size="md" isOpen={isOpen} onClose={onClose} placement="center">
+    <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex flex-col gap-1">Saved Scripts</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Delete</ModalHeader>
             <ModalBody className="text-base">Are you sure?</ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
