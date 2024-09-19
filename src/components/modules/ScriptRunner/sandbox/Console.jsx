@@ -1,7 +1,6 @@
 import { Hook, Unhook, Console as ConsoleFeed } from "console-feed";
 import { useEffect, useState } from "react";
 import { sendMessage } from "./utils";
-import { exportFile, openFile } from "@/utils/utils";
 import * as turf from "@turf/turf";
 import * as XLSX from "xlsx";
 import _ from "lodash";
@@ -19,6 +18,8 @@ const Console = () => {
 
           const pull = (endPoint) => sendMessage(event, "pull", "pullResult", { endPoint });
           const push = (endPoint, payload, method) => sendMessage(event, "push", "pushResult", { endPoint, payload, method });
+          const openFile = (type) => sendMessage(event, "openFile", "openFileResult", { type });
+          const exportFile = (type, data) => sendMessage(event, "exportFile", null, { type, data });
 
           try {
             const AsyncFunction = async function () {}.constructor;
