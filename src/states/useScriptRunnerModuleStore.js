@@ -1,20 +1,15 @@
 import { create } from "zustand";
 
 export const initialStore = {
-  settings: {
-    program: null,
-    metadata: null,
-    function: "whole",
-    metadataType: null,
-    userGroupsSelected: { admin: [], capture: [], view: [] },
-    isDirty: false,
-  },
+  currentScript: null,
+  scripts: [],
 };
 
 const useSharingSettingsModuleStore = create((set) => ({
   ...initialStore,
   actions: {
-    setSettings: (settings) => set(() => ({ settings })),
+    setCurrentScript: (currentScript) => set(() => ({ currentScript })),
+    setScripts: (scripts) => set(() => ({ scripts })),
     reset: () => set(() => initialStore),
   },
 }));

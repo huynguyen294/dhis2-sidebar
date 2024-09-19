@@ -1,15 +1,15 @@
 import { Hook, Unhook, Console as ConsoleFeed } from "console-feed";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { sendMessage } from "./utils";
 import * as turf from "@turf/turf";
 import * as XLSX from "xlsx";
 import _ from "lodash";
 
 const exportFile = () => {};
+const openFile = () => {};
 
 const Console = () => {
   const [logs, setLogs] = useState([]);
-  const inputRef = useRef();
 
   //handle communication
   useEffect(() => {
@@ -21,11 +21,6 @@ const Console = () => {
 
           const pull = (endPoint) => sendMessage(event, "pull", "pullResult", { endPoint });
           const push = (endPoint, payload, method) => sendMessage(event, "push", "pushResult", { endPoint, payload, method });
-          const openFile = () => {
-            console.log("alo");
-            console.log(inputRef.current);
-            inputRef.current.click();
-          };
 
           try {
             const AsyncFunction = async function () {}.constructor;
@@ -42,6 +37,7 @@ const Console = () => {
                 return null;
             }
             catch(err){
+              console.log(err)
               return err;
             }`
             );
@@ -77,7 +73,6 @@ const Console = () => {
 
   return (
     <div>
-      <input hidden ref={inputRef} />
       <ConsoleFeed logs={logs} variant="dark" styles={{ BASE_FONT_SIZE: 13 }} />
     </div>
   );

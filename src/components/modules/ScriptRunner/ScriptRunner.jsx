@@ -1,26 +1,38 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { javascript } from "@codemirror/lang-javascript";
 import { materialDark } from "@uiw/codemirror-theme-material";
-import { Button, Input, Tooltip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Divider } from "@nextui-org/react";
+import { Button, Input, Tooltip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faPlay, faSave, faSync, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import CodeMirror from "@uiw/react-codemirror";
-import IFrame from "./iframe/IFrame";
 import js_beautify from "js-beautify";
+
+import { useScriptRunnerModuleStore } from "@/states/module";
+import { useShallow } from "zustand/react/shallow";
+import LocalDB from "@/lib/db/indexedDB";
+import IFrame from "./iframe/IFrame";
+import { toast } from "react-toastify";
 
 const exportFile = () => {};
 
-const ScriptRunner = () => {
-  const [script, setScript] = useState("//Write your code below:");
-  const [file, setFile] = useState(null);
-  const [scriptName, setScriptName] = useState("Script 1");
-  const iframeRef = useRef();
-  const inputRef = useRef();
+const initialState = { script: "//Write your code below:", name: "new script" };
 
-  const openFile = () => {
-    inputRef.current.click();
+const ScriptRunner = () => {
+  const { currentScript, scripts, actions } = useScriptRunnerModuleStore(
+    useShallow((state) => ({ currentScript: state.currentScript, actions: state.actions, scripts: state.scripts }))
+  );
+  const { setScripts, setCurrentScript } = actions;
+
+  const [data, setData] = useState(initialState);
+  const iframeRef = useRef();
+
+  const { script, name } = data;
+
+  const changeData = (property, value) => {
+    setData((prev) => ({ ...prev, [property]: value }));
   };
 
   const run = () => {
@@ -31,24 +43,85 @@ const ScriptRunner = () => {
     iframeRef.current.contentWindow.postMessage({ action: "clearLog" }, "*");
   };
 
+  const handleMenuAction = async (key) => {
+    switch (key) {
+      case "beautify": {
+        const beautified = js_beautify(script);
+        changeData("script", beautified);
+        break;
+      }
+      case "new-file": {
+        setData(initialState);
+        setCurrentScript(null);
+        break;
+      }
+      case "save": {
+        try {
+          if (!data.id) {
+            const createdId = await LocalDB.scripts.add(data);
+            const newScript = { ...data, id: createdId };
+            setScripts(scripts.concat(newScript));
+            setCurrentScript(newScript);
+            toast.success("saved");
+            break;
+          } else {
+            //already currentScript
+            await LocalDB.scripts.update(data.id, data);
+            const newScripts = scripts.map((s) => (s.id === data.id ? data : s));
+            setScripts(newScripts);
+            toast.success("saved");
+            break;
+          }
+        } catch (error) {
+          toast.success("cannot save");
+          console.log(error);
+          break;
+        }
+      }
+      case "save-as": {
+        try {
+          const { id, ...updatedData } = data;
+          const createdId = await LocalDB.scripts.add(updatedData);
+          const newScript = { id: createdId, ...updatedData };
+          setScripts(scripts.concat(newScript));
+          setCurrentScript(newScript);
+          toast.success("saved");
+          break;
+        } catch (error) {
+          toast.success("cannot save");
+          console.log(error);
+          break;
+        }
+      }
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (currentScript) setData(currentScript);
+  }, [currentScript]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const scripts = await LocalDB.scripts.toArray();
+        setScripts(scripts);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="container mx-auto h-full flex flex-col rounded-lg overflow-auto bg-[#2e3235]">
-      <input
-        hidden
-        type="file"
-        ref={inputRef}
-        onChange={(e) => {
-          setFile(e.target.files);
-          inputRef.current.value = "";
-        }}
-      ></input>
       <div className="pt-2 px-2 pb-1 space-x-2 w-full flex justify-between">
         <Input
           variant="bordered"
           className="w-auto"
           classNames={{ inputWrapper: "border-0 shadow-none", input: "text-white/70 font-semibold" }}
-          value={scriptName}
-          onChange={(e) => setScriptName(e.target.value)}
+          value={name}
+          onChange={(e) => changeData("name", e.target.value)}
         />
         <div className="space-x-2">
           <Button size="sm" startContent={<FontAwesomeIcon icon={faPlay} />} color="success" onClick={run}>
@@ -60,18 +133,7 @@ const ScriptRunner = () => {
                 File
               </Button>
             </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Static Actions"
-              onAction={(key) => {
-                switch (key) {
-                  case "beautify": {
-                    const beautified = js_beautify(script);
-                    setScript(beautified);
-                    break;
-                  }
-                }
-              }}
-            >
+            <DropdownMenu aria-label="Static Actions" onAction={handleMenuAction}>
               <DropdownItem key="beautify">Beautify</DropdownItem>
               <DropdownItem key="new-file">New script</DropdownItem>
               <DropdownItem key="save">Save script</DropdownItem>
@@ -89,7 +151,7 @@ const ScriptRunner = () => {
             className="text-[13px]"
             extensions={[javascript()]}
             onChange={(value) => {
-              setScript(value);
+              changeData("script", value);
             }}
           />
         </ResizablePanel>

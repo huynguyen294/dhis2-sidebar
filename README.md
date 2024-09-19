@@ -1,8 +1,12 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+##To use this app:
 
-Currently, two official plugins are available:
+- Run "yarn install"
+- Then "yarn build"
+- Go to chrome extensions management => enable developer mode => click "Load unpacked" => select dist folder builded.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##To run in dev:
+
+- create .env file coping from .env.production
+- Run "yarn dev"

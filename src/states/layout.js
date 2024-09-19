@@ -5,14 +5,9 @@ import modules from "@/components/modules";
 const useLayoutStore = create((set) => ({
   screen: null,
   module: modules[0],
-  lastLogin: "",
+  loggedIn: false,
   changeScreen: (screen) => set(() => ({ screen })),
-  setLastLogin: (lastLogin) =>
-    set(
-      produce((state) => {
-        state.lastLogin = lastLogin;
-      })
-    ),
+  setLoggedIn: (loggedIn) => set(() => ({ loggedIn })),
   selectModule: (module) =>
     set(
       produce((state) => {
