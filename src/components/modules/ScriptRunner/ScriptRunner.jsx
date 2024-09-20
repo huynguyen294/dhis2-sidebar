@@ -82,7 +82,7 @@ const ScriptRunner = () => {
         try {
           const { id, ...updatedData } = data;
           const createdId = await LocalDB.scripts.add(updatedData);
-          const newScript = { id: createdId, ...updatedData };
+          const newScript = { ...updatedData, id: createdId };
           setScripts(scripts.concat(newScript));
           setCurrentScript(newScript);
           toast.success("saved");

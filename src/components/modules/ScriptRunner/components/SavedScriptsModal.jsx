@@ -6,16 +6,19 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Listbo
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import ImportExportModal from "./ImportExportModal";
 import LocalDB from "@/lib/db/indexedDB";
 
 const SavedScriptsModal = ({ isOpen, onClose }) => {
   const { isOpen: isDeleteModalOpen, onClose: onDeleteModalClose, onOpen: onDeleteModalOpen } = useDisclosure();
+  const { isOpen: isImportExportModalOpen, onClose: onImportExportModalClose, onOpen: onImportExportModalOpen } = useDisclosure();
   const { scripts, actions } = useScriptRunnerModuleStore(useShallow((state) => ({ scripts: state.scripts, actions: state.actions })));
   const { setCurrentScript, setScripts } = actions;
 
   const [query, setQuery] = useState("");
   const [filteredScripts, setFilteredScripts] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
+  const [isExport, setIsExport] = useState(null);
 
   const handleDelete = async () => {
     await LocalDB.scripts.where("id").equals(deleteId).delete();
@@ -29,6 +32,7 @@ const SavedScriptsModal = ({ isOpen, onClose }) => {
 
   return (
     <>
+      <ImportExportModal isOpen={isImportExportModalOpen} onClose={onImportExportModalClose} isExport={isExport} />
       <ConfirmDeleteModal isOpen={isDeleteModalOpen} onClose={onDeleteModalClose} onDelete={handleDelete} />
       <Modal size="md" isOpen={isOpen} onClose={onClose} placement="center">
         <ModalContent>
@@ -69,8 +73,26 @@ const SavedScriptsModal = ({ isOpen, onClose }) => {
                 </Listbox>
               </ModalBody>
               <ModalFooter>
-                <Button startContent={<FontAwesomeIcon icon={faUpload} />}>Import</Button>
-                <Button startContent={<FontAwesomeIcon icon={faDownload} />}>Export</Button>
+                <Button
+                  startContent={<FontAwesomeIcon icon={faUpload} />}
+                  onClick={() => {
+                    setIsExport(false);
+                    onClose();
+                    onImportExportModalOpen();
+                  }}
+                >
+                  Import
+                </Button>
+                <Button
+                  startContent={<FontAwesomeIcon icon={faDownload} />}
+                  onClick={() => {
+                    setIsExport(true);
+                    onClose();
+                    onImportExportModalOpen();
+                  }}
+                >
+                  Export
+                </Button>
               </ModalFooter>
             </>
           )}
