@@ -156,7 +156,7 @@ const ScriptRunner = () => {
             value={script}
             theme={materialDark}
             height="100%"
-            className="text-[13px]"
+            className="text-[13px] w-full h-full overflow-y-auto [&_.cm-panels-bottom_.cm-button]:rounded [&_.cm-panels-bottom_label]:inline-flex [&_.cm-panels-bottom_label]:items-center"
             extensions={[javascript()]}
             onChange={(value) => {
               changeData("script", value);

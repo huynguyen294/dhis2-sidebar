@@ -77,7 +77,7 @@ const Console = () => {
   }, []);
 
   return (
-    <div className="[&>div:last-child>div:first-child]:border-t-0">
+    <div className="[&>div:last-child>div:first-child]:border-t-0 [&>div:last-child>div>div:last-child]:ml-[4px] [&>div:last-child>div>div:first-child]:pl-[4px]">
       <Progress size="sm" isIndeterminate aria-label="Loading..." className={`w-full ${scripting ? "visible" : "invisible"}`} />
       <ConsoleFeed logs={logs} variant="dark" styles={{ BASE_FONT_SIZE: 13 }} />
     </div>
