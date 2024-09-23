@@ -15,8 +15,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, "index.html"),
-        sandbox: path.resolve(__dirname, "sandbox.html"),
+        index: path.resolve(__dirname, "index.html"),
+        "script-runner-sandbox": path.resolve(__dirname, "script-runner-sandbox.html"),
       },
     },
   },

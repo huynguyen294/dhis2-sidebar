@@ -38,11 +38,19 @@ const UtilModal = ({ isOpen, onClose }) => {
                   <li>data: object</li>
                 </ul>
               </div>
+              <div>
+                <p className="font-semibold">importLibraries(cdnList)</p>
+                <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
+                  <li>async function</li>
+                  <li>cdnList: array (library cdn urls)</li>
+                </ul>
+              </div>
               <p className="-mb-2 font-bold underline italic">Libraries:</p>
               <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
                 <li>lodash as _</li>
                 <li>xlsx as XLSX</li>
                 <li>turf as turf</li>
+                <li>date-fns as dateFns</li>
               </ul>
             </ModalBody>
             <ModalFooter />

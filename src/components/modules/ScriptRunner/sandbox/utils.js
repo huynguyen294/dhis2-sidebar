@@ -13,4 +13,18 @@ const sendMessage = (event, action, resultAction, payload) =>
       })
     : event.source.postMessage({ action, ...payload }, "*");
 
-export { sendMessage };
+const loadScript = (cdn) =>
+  new Promise((resolve, reject) => {
+    const loadedScript = document.createElement("script");
+    loadedScript.src = cdn;
+    loadedScript.onload = () => {
+      resolve(loadedScript);
+    };
+    loadedScript.onerror = () => {
+      reject(`Failed to load the library: ${cdn}`);
+    };
+
+    document.head.appendChild(loadedScript);
+  });
+
+export { sendMessage, loadScript };

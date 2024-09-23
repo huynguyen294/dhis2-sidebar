@@ -1,12 +1,15 @@
 import { Hook, Unhook, Console as ConsoleFeed } from "console-feed";
 import { useEffect, useState } from "react";
-import { sendMessage } from "./utils";
+import { loadScript, sendMessage } from "./utils";
+import { Progress } from "@nextui-org/react";
 import * as turf from "@turf/turf";
 import * as XLSX from "xlsx";
+import * as dateFns from "date-fns";
 import _ from "lodash";
 
 const Console = () => {
   const [logs, setLogs] = useState([]);
+  const [scripting, setScripting] = useState(false);
 
   //handle communication
   useEffect(() => {
@@ -15,23 +18,26 @@ const Console = () => {
       switch (action) {
         case "runScript": {
           const { script } = event.data;
+          const libraryScriptElements = [];
 
           const pull = (endPoint) => sendMessage(event, "pull", "pullResult", { endPoint });
           const push = (endPoint, payload, method) => sendMessage(event, "push", "pushResult", { endPoint, payload, method });
           const openFile = (type) => sendMessage(event, "openFile", "openFileResult", { type });
           const exportFile = (type, data) => sendMessage(event, "exportFile", null, { type, data });
+          const importLibraries = (listCdn) => Promise.all(listCdn.map(async (cdn) => libraryScriptElements.push(await loadScript(cdn))));
 
-          try {
-            const AsyncFunction = async function () {}.constructor;
-            const func = new AsyncFunction(
-              "pull",
-              "push",
-              "XLSX",
-              "exportFile",
-              "openFile",
-              "_",
-              "turf",
-              `try {
+          const AsyncFunction = async function () {}.constructor;
+          const func = new AsyncFunction(
+            "pull",
+            "push",
+            "XLSX",
+            "exportFile",
+            "openFile",
+            "_",
+            "turf",
+            "dateFns",
+            "importLibraries",
+            `try {
                 ${script}
                 return null;
             }
@@ -39,12 +45,12 @@ const Console = () => {
               console.log(err)
               return err;
             }`
-            );
+          );
 
-            await func(pull, push, XLSX, exportFile, openFile, _, turf);
-          } catch (err) {
-            console.log(err);
-          }
+          setScripting(true);
+          await func(pull, push, XLSX, exportFile, openFile, _, turf, dateFns, importLibraries);
+          libraryScriptElements.forEach((scriptElement) => scriptElement.remove());
+          setScripting(false);
           break;
         }
 
@@ -71,7 +77,8 @@ const Console = () => {
   }, []);
 
   return (
-    <div>
+    <div className="[&>div:last-child>div:first-child]:border-t-0">
+      <Progress size="sm" isIndeterminate aria-label="Loading..." className={`w-full ${scripting ? "visible" : "invisible"}`} />
       <ConsoleFeed logs={logs} variant="dark" styles={{ BASE_FONT_SIZE: 13 }} />
     </div>
   );

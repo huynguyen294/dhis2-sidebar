@@ -50,7 +50,7 @@ const ImportExportModal = ({ isExport, isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="md">
+    <Modal isOpen={isOpen} onClose={onClose} size="md" placement="center">
       <ModalContent>
         {(onClose) => (
           <>

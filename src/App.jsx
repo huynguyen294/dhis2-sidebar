@@ -3,13 +3,13 @@
 import { useShallow } from "zustand/react/shallow";
 import { useEffect, useState } from "react";
 
-import { pull } from "./utils/fetch";
 import Header from "./components/Header";
 import useMetadataStore from "./states/metadata";
 import Content from "./components/Content";
+import { pull } from "./utils/fetch";
 import { INSTANCES } from "./constants";
-import "./App.css";
 import { Spinner } from "@nextui-org/react";
+import "./App.css";
 
 const appMode = import.meta.env.VITE_APP_MODE;
 
