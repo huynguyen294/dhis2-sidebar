@@ -17,7 +17,7 @@
     "default_path": "index.html"
   },
   "sandbox": {
-    "pages": ["sandbox.html"]
+    "pages": ["script-runner-sandbox.html"]
   },
   "content_scripts": [
     {
