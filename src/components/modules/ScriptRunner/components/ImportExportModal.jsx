@@ -8,6 +8,7 @@ import LocalDB from "@/lib/db/indexedDB";
 import { exportFile } from "@/utils/utils";
 import { useScriptRunnerModuleStore } from "@/states/module";
 import { useShallow } from "zustand/react/shallow";
+import { toast } from "react-toastify";
 
 const columns = [
   { key: "name", label: "Name" },
@@ -24,17 +25,20 @@ const ImportExportModal = ({ isExport, isOpen, onClose }) => {
   const [loadedScripts, setLoadedScripts] = useState(null);
 
   const handleSubmit = () => {
-    const result = selectedKeys === "all" ? scripts : scripts.filter(({ id }) => selectedKeys.has(id + ""));
     if (isExport) {
+      const result = selectedKeys === "all" ? scripts : scripts.filter(({ id }) => selectedKeys.has(id + ""));
       exportFile("json", result);
       return;
     }
 
+    const result = selectedKeys === "all" ? loadedScripts : loadedScripts.filter(({ id }) => selectedKeys.has(id + ""));
     // eslint-disable-next-line no-unused-vars
     result.forEach(async ({ id, ...item }) => {
       const createdId = await LocalDB.scripts.add(item);
       const newScript = { ...item, id: createdId };
       setScripts(scripts.concat(newScript));
+      toast.success("Script imported!");
+      onClose();
     });
   };
 
