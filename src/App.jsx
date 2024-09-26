@@ -72,8 +72,14 @@ function App() {
 
   if (!ready)
     return (
-      <div className="h-screen w-full flex justify-center items-center text-center text-lg">
-        This extension only works on : {INSTANCES.join(", ")} Please try again.
+      <div className="h-screen w-full flex flex-col justify-center items-center text-center text-lg">
+        This extension only works on :
+        <ul>
+          {INSTANCES.map((url) => (
+            <li key={url}>{url}</li>
+          ))}
+        </ul>
+        Please try again.
       </div>
     );
 

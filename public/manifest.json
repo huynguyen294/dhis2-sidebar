@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "js": ["content.js"],
-      "matches": ["https://laos-his.gov.la/dhis/*", "https://dhis2.asia/*"]
+      "matches": ["https://laos-his.gov.la/dhis/*", "https://dhis2.asia/*", "https://khodulieu.pasteurhcm.gov.vn/*"]
     }
   ],
   "background": {
