@@ -16,8 +16,6 @@ import LocalDB from "@/lib/db/indexedDB";
 import IFrame from "./iframe/IFrame";
 import { toast } from "react-toastify";
 
-const exportFile = () => {};
-
 const initialState = { script: "//Write your code below:", name: "new script" };
 
 const ScriptRunner = () => {
@@ -36,7 +34,7 @@ const ScriptRunner = () => {
   };
 
   const run = () => {
-    iframeRef.current.contentWindow.postMessage({ action: "runScript", script }, "*");
+    iframeRef.current.contentWindow.postMessage({ action: "runScript", script, scripts }, "*");
   };
 
   const clearLog = () => {

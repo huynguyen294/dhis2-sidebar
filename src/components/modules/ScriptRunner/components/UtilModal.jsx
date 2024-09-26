@@ -45,6 +45,14 @@ const UtilModal = ({ isOpen, onClose }) => {
                   <li>cdnList: array (library cdn urls)</li>
                 </ul>
               </div>
+              <div>
+                <p className="font-semibold">importScript(scriptName)</p>
+                <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
+                  <li>async function</li>
+                  <li>scriptName: string</li>
+                  <li>imported script can return functions, objects...</li>
+                </ul>
+              </div>
               <p className="-mb-2 font-bold underline italic">Libraries:</p>
               <ul className="list-disc ml-2" style={{ listStyle: "inside" }}>
                 <li>lodash as _</li>
