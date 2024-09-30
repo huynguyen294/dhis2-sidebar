@@ -1,3 +1,5 @@
+import useMetadataStore from "@/states/metadata";
+
 /* eslint-disable no-undef */
 let username, password, baseUrl, appMode;
 baseUrl = import.meta.env.VITE_BASE_URL;
@@ -16,6 +18,7 @@ const pull = async (endPoint) => {
     return data;
   }
 
+  baseUrl = useMetadataStore.getState().systemSettings?.contextPath ?? baseUrl;
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {
@@ -45,6 +48,7 @@ const push = async (endPoint, payload, method) => {
     return data;
   }
 
+  baseUrl = useMetadataStore.getState().systemSettings?.contextPath ?? baseUrl;
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {

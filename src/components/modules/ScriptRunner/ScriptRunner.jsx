@@ -12,9 +12,9 @@ import js_beautify from "js-beautify";
 
 import { useScriptRunnerModuleStore } from "@/states/module";
 import { useShallow } from "zustand/react/shallow";
+import { toast } from "react-toastify";
 import LocalDB from "@/lib/db/indexedDB";
 import IFrame from "./iframe/IFrame";
-import { toast } from "react-toastify";
 
 const initialState = { script: "//Write your code below:", name: "new script" };
 
@@ -39,6 +39,34 @@ const ScriptRunner = () => {
 
   const clearLog = () => {
     iframeRef.current.contentWindow.postMessage({ action: "clearLog" }, "*");
+  };
+
+  const handleKeyDown = async (e) => {
+    if (e.ctrlKey && e.code === "KeyS") {
+      e.preventDefault();
+      const beautified = js_beautify(script);
+      changeData("script", beautified);
+
+      const newData = { ...data, script: beautified };
+      try {
+        if (!data.id) {
+          const createdId = await LocalDB.scripts.add(data);
+          const newScript = { ...newData, id: createdId };
+          setScripts(scripts.concat(newScript));
+          setCurrentScript(newScript);
+          toast.success("saved");
+        } else {
+          //already currentScript
+          await LocalDB.scripts.update(data.id, { ...newData });
+          const newScripts = scripts.map((s) => (s.id === data.id ? newData : s));
+          setScripts(newScripts);
+          toast.success("saved");
+        }
+      } catch (error) {
+        toast.success("cannot save");
+        console.log(error);
+      }
+    }
   };
 
   const handleMenuAction = async (key) => {
@@ -159,6 +187,7 @@ const ScriptRunner = () => {
             onChange={(value) => {
               changeData("script", value);
             }}
+            onKeyDown={handleKeyDown}
           />
         </ResizablePanel>
         <ResizableHandle />
