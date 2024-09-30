@@ -15,6 +15,9 @@ const sendMessage = (event, action, resultAction, payload) =>
 
 const loadScript = (cdn) =>
   new Promise((resolve, reject) => {
+    const loaded = document.querySelector(`script[src='${cdn}']`);
+    if (loaded) resolve(loaded);
+
     const loadedScript = document.createElement("script");
     loadedScript.src = cdn;
     loadedScript.onload = () => {

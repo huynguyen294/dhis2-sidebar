@@ -18,13 +18,14 @@ const Console = () => {
       switch (action) {
         case "runScript": {
           const { script, scripts } = event.data;
-          const libraryScriptElements = [];
 
           const pull = (endPoint) => sendMessage(event, "pull", "pullResult", { endPoint });
           const push = (endPoint, payload, method) => sendMessage(event, "push", "pushResult", { endPoint, payload, method });
           const openFile = (type) => sendMessage(event, "openFile", "openFileResult", { type });
           const exportFile = (type, data) => sendMessage(event, "exportFile", null, { type, data });
-          const importLibraries = (listCdn) => Promise.all(listCdn.map(async (cdn) => libraryScriptElements.push(await loadScript(cdn))));
+          const importLibraries = (listCdn) => {
+            return Promise.all(listCdn.map(async (cdn) => await loadScript(cdn)));
+          };
           const importScript = (scriptName) => {
             const found = scripts?.find((s) => s.name === scriptName);
             if (!found) return;
@@ -56,7 +57,6 @@ const Console = () => {
 
           setScripting(true);
           await func(pull, push, XLSX, exportFile, openFile, _, turf, dateFns, importLibraries, importScript);
-          libraryScriptElements.forEach((scriptElement) => scriptElement.remove());
           setScripting(false);
           break;
         }
